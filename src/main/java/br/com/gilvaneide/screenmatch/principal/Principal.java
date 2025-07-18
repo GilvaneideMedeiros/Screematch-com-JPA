@@ -15,9 +15,12 @@ public class Principal {
     private ConsumoApi consumo = new ConsumoApi();
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=6585022c";
+    private final String API_KEY = "&apikey=9de8e5d7";
 
     public void exibeMenu() {
+        System.out.println("\n******************************");
+        System.out.println("*  Bem vindo ao ScreenMatch  *");
+        System.out.println("******************************");
         var menu = """
                 1 - Buscar séries
                 2 - Buscar episódios
