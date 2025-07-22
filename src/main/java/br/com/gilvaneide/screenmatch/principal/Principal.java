@@ -2,12 +2,15 @@ package br.com.gilvaneide.screenmatch.principal;
 
 import br.com.gilvaneide.screenmatch.model.DadosSerie;
 import br.com.gilvaneide.screenmatch.model.DadosTemporada;
+import br.com.gilvaneide.screenmatch.model.Serie;
 import br.com.gilvaneide.screenmatch.service.ConsumoApi;
 import br.com.gilvaneide.screenmatch.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -63,7 +66,7 @@ public class Principal {
     }
 
     private DadosSerie getDadosSerie() {
-        System.out.println("Digite o nome da série para busca");
+        System.out.println("Digite o nome da série para busca\n");
         var nomeSerie = leitura.nextLine();
         var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
         DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
@@ -83,6 +86,13 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        dadosSeries.forEach(System.out::println);
+        System.out.println("Listagem de séries buscadas\n");
+        List<Serie> series = new ArrayList<>();
+        series = dadosSeries.stream()
+                .map(d -> new Serie(d))
+                .collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 }
