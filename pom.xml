@@ -8,7 +8,7 @@
 		<version>3.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.alura</groupId>
+	<groupId>br.com.gilvaneide</groupId>
 	<artifactId>screenmatch</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>screenmatch</name>
@@ -16,19 +16,6 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
-
-	<!-- 1. ADICIONE ESTA SEÇÃO PARA GERENCIAR AS DEPENDÊNCIAS DO GOOGLE CLOUD -->
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.google.cloud</groupId>
-				<artifactId>google-cloud-dependencies</artifactId>
-				<version>26.33.0</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -49,8 +36,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.cloud</groupId>
-			<artifactId>google-cloud-translate</artifactId>
+			<groupId>com.google.genai</groupId>
+			<artifactId>google-genai</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 
 	</dependencies>
@@ -65,4 +53,3 @@
 	</build>
 
 </project>
-
