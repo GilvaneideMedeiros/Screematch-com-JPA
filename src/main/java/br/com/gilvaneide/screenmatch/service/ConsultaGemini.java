@@ -1,28 +1,27 @@
 package br.com.gilvaneide.screenmatch.service;
 
-import com.gemini.api.client.Client;
-import com.gemini.api.client.models.GenerateContentResponse;
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.ai.client.generativeai.type.ResponseHandler;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ConsultaGemini {
-    public static String obterTraducao(String texto){
-        String modelo = "gemini-2.0-flash-lite"; // Pode modificar a versão se desejar
-        String prompt = "Traduz o seguinte texto para português brasileiro: " + texto;
 
-        Client cliente = new Client.Builder().apiKey("AIzaSyBcxDe4QFsPHvVa5zY_miO1WA6P4KGnsdQ").build();
+    @Value("${gemini.api.key}")
+    private String apiKey;
 
-        try{
-            GenerateContentResponse response = client.models().generateContent(
-                    modelo,
-                    prompt,
-                    null); // parâmetro de configurações adicionais
+    public String obterTraducao(String texto) {
+        try {
+            GenerativeModel gm = new GenerativeModel("gemini-1.5-flash-latest", apiKey);
+            String prompt = "Traduza o seguinte texto para o português do Brasil: " + texto;
 
-            if(!response.text().isEmpty()) {
-                return response.text();
-            }
-        }catch (Exception e){
+            GenerateContentResponse response = gm.generateContent(prompt);
+            return ResponseHandler.getText(response);
+        } catch (Exception e) {
             System.err.println("Erro ao chamar a API Gemini para tradução: " + e.getMessage());
+            throw new RuntimeException("Falha ao traduzir texto com a API Gemini.", e);
         }
-
-        return null;
     }
 }

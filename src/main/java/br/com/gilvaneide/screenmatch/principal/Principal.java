@@ -5,6 +5,7 @@ import br.com.gilvaneide.screenmatch.model.DadosTemporada;
 import br.com.gilvaneide.screenmatch.model.Serie;
 import br.com.gilvaneide.screenmatch.service.ConsumoApi;
 import br.com.gilvaneide.screenmatch.service.ConverteDados;
+import br.com.gilvaneide.screenmatch.service.SerieMapper;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,6 +21,12 @@ public class Principal {
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=9de8e5d7";
     private List<DadosSerie> dadosSeries = new ArrayList<>();
+
+    private SerieMapper serieMapper;
+
+    public Principal(SerieMapper serieMapper) {
+        this.serieMapper = serieMapper;
+    }
 
     public void exibeMenu() {
         System.out.println("\n******************************");
@@ -59,10 +66,16 @@ public class Principal {
         }
     }
 
+//    @Autowired
+//    private SerieMapper serieMapper;
+
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
         dadosSeries.add(dados);
-        System.out.println(dados);
+
+        Serie serie = serieMapper.converterDeDadosSerie(dados);
+        System.out.println("\n*** Série encontrada ***");
+        System.out.println(serie);
     }
 
     private DadosSerie getDadosSerie() {
@@ -78,7 +91,8 @@ public class Principal {
         List<DadosTemporada> temporadas = new ArrayList<>();
 
         for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
-            var json = consumo.obterDados(ENDERECO + dadosSerie.titulo().replace(" ", "+") + "&season=" + i + API_KEY);
+            var json = consumo.obterDados(ENDERECO + dadosSerie
+                    .titulo().replace(" ", "+") + "&season=" + i + API_KEY);
             DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
             temporadas.add(dadosTemporada);
         }
@@ -87,9 +101,8 @@ public class Principal {
 
     private void listarSeriesBuscadas() {
         System.out.println("Listagem de séries buscadas\n");
-        List<Serie> series = new ArrayList<>();
-        series = dadosSeries.stream()
-                .map(d -> new Serie(d))
+        List<Serie> series = dadosSeries.stream()
+                .map(d -> serieMapper.converterDeDadosSerie(d))
                 .collect(Collectors.toList());
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))

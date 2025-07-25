@@ -1,8 +1,5 @@
 package br.com.gilvaneide.screenmatch.model;
 
-import java.util.OptionalDouble;
-import br.com.gilvaneide.screenmatch.model.Categoria;
-
 public class Serie {
     private String titulo;
     private Integer totalTemporadas;
@@ -12,9 +9,9 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    public String getTitulo() {
-        return titulo;
-    }
+    //public Serie(DadosSerie d) {}
+
+    public Serie() {}
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
@@ -68,26 +65,17 @@ public class Serie {
         this.sinopse = sinopse;
     }
 
-    public Serie(DadosSerie dadosSerie) {
-        this.titulo = dadosSerie.titulo();
-        this.totalTemporadas = dadosSerie.totalTemporadas();
-        this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
-        this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
-        this.atores = dadosSerie.atores();
-        this.poster = dadosSerie.poster();
-        this.sinopse = dadosSerie.sinopse();
-    }
-
     @Override
     public String toString() {
         return "Serie{" +
-                "titulo='" + titulo + '\'' +
-                ", totalTemporadas=" + totalTemporadas +
-                ", avaliacao=" + avaliacao +
-                ", genero=" + genero +
-                ", atores='" + atores + '\'' +
-                ", poster='" + poster + '\'' +
-                ", sinopse='" + sinopse + '\'' +
+                " | Título='" + titulo + '\'' +
+                " | TotalTemporadas=" + totalTemporadas +
+                " | Avaliacao=" + avaliacao +
+                " | Gênero=" + genero +
+                " | Atores='" + atores + '\'' +
+                " | Põster='" + poster + '\'' +
+                " | Sinopse='" + sinopse + '\'' +
                 '}';
     }
+
 }
