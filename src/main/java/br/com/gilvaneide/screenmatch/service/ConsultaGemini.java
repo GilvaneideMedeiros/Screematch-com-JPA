@@ -3,21 +3,28 @@ package br.com.gilvaneide.screenmatch.service;
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
 import com.google.ai.client.generativeai.type.ResponseHandler;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ConsultaGemini {
 
-    @Value("${gemini.api.key}")
-    private String apiKey;
+    // O Spring irá injetar o bean do GenerativeModel configurado automaticamente
+    private final GenerativeModel generativeModel;
+
+    // Usamos o construtor para receber a dependência (melhor prática)
+    @Autowired
+    public ConsultaGemini(GenerativeModel generativeModel) {
+        this.generativeModel = generativeModel;
+    }
 
     public String obterTraducao(String texto) {
         try {
-            GenerativeModel gm = new GenerativeModel("gemini-1.5-flash-latest", apiKey);
             String prompt = "Traduza o seguinte texto para o português do Brasil: " + texto;
 
-            GenerateContentResponse response = gm.generateContent(prompt);
+            // Agora usamos o objeto que o Spring nos deu
+            GenerateContentResponse response = generativeModel.generateContent(prompt);
+
             return ResponseHandler.getText(response);
         } catch (Exception e) {
             System.err.println("Erro ao chamar a API Gemini para tradução: " + e.getMessage());
